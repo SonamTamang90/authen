@@ -1,5 +1,11 @@
+import Button from "@/components/button";
+
 const SignIn = () => {
-  return <div>SIGN IN PAGE</div>;
+  return (
+    <div>
+      <Button>Sign In</Button>
+    </div>
+  );
 };
 
 export default SignIn;
