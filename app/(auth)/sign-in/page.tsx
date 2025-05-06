@@ -1,10 +1,8 @@
-import Button from "@/components/button";
+import AuthForm from "@/components/auth-form";
 
 const SignIn = () => {
   return (
-    <div>
-      <Button>Sign In</Button>
-    </div>
+    <AuthForm formType="SIGN_IN" defaultValues={{ email: "", password: "" }} />
   );
 };
 
