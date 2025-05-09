@@ -1,6 +1,8 @@
 ## Authen
 
-A complete authentication system build with Next.js, Auth.js and MongoDB
+A complete authentication system build with Next.js Auth.js and MongoDB
+
+![Image Description](public/screenshot/authen-ss.png)
 
 ### Features:
 
