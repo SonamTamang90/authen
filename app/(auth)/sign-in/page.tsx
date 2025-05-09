@@ -1,15 +1,8 @@
-"use client";
-
-import AuthForm from "@/components/auth-form";
-import { SignInSchema } from "@/lib/validation";
+import AuthForm from "@/components/forms/AuthForm";
 
 const SignIn = () => {
   return (
-    <AuthForm
-      schema={SignInSchema}
-      formType="SIGN_IN"
-      defaultValues={{ email: "", password: "" }}
-    />
+    <AuthForm formType="SIGN_IN" defaultValues={{ email: "", password: "" }} />
   );
 };
 

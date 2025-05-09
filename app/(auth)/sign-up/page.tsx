@@ -1,14 +1,17 @@
 "use client";
 
-import AuthForm from "@/components/auth-form";
-import { SignUpSchema } from "@/lib/validation";
+import AuthForm from "@/components/forms/AuthForm";
 
 const SignUp = () => {
   return (
     <AuthForm
-      schema={SignUpSchema}
       formType="SIGN_UP"
-      defaultValues={{ username: "", name: "", email: "", password: "" }}
+      defaultValues={{
+        fullname: "",
+        email: "",
+        password: "",
+        confirmpassword: "",
+      }}
     />
   );
 };
