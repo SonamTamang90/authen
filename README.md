@@ -41,3 +41,32 @@ cd authen
 # Install dependencies
 npm install
 ```
+
+### Environment Setup
+
+Create a .env.local file in the root directory with the following variables:
+
+```bash
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-[npx auth secret]
+
+# MongoDB
+MONGODB_URI=your-mongodb-connection-string
+
+# OAuth Providers
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GITHUB_ID=your-github-client-id
+GITHUB_SECRET=your-github-client-secret
+```
+
+### Usage
+
+Starting the Development Server
+
+```bash
+npm run dev
+```
+
+Open http://localhost:3000 in your browser to see the result.
