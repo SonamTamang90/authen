@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import Link from "next/link";
+import { ButtonHTMLAttributes } from "react";
 
 const variants = {
   primary: clsx(
@@ -8,34 +9,47 @@ const variants = {
     "text-base font-medium whitspace-nowrap text-white",
     "hover:bg-gray-800",
   ),
+  outline: clsx(
+    "rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-950 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus-visible:ring-transparent",
+  ),
 };
 
-type ButtonProps = {
+type BaseProps = {
   variant?: keyof typeof variants;
-  href?: string;
-  children: React.ReactNode;
   className?: string;
+  children: React.ReactNode;
 };
 
-const Button = ({
-  variant = "primary",
-  href,
-  children,
-  className,
-  ...props
-}: ButtonProps) => {
-  className = clsx(className, variants[variant]);
+type ButtonAsButtonProps = BaseProps &
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    href?: undefined;
+  };
 
-  if (href) {
+type ButtonAsLinkProps = BaseProps & {
+  href: string;
+  target?: string;
+  rel?: string;
+};
+
+type ButtonProps = ButtonAsButtonProps | ButtonAsLinkProps;
+
+const Button = (props: ButtonProps) => {
+  const { variant = "primary", className, children, ...rest } = props;
+  const combinedClassName = clsx(className, variants[variant]);
+
+  const isLink = "href" in props && props.href !== undefined;
+
+  if (isLink) {
+    const { href, target, rel } = props as ButtonAsLinkProps;
     return (
-      <Link href={href} className={className} {...props}>
+      <Link href={href} target={target} rel={rel} className={combinedClassName}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button {...props} className={className}>
+    <button {...(rest as ButtonAsButtonProps)} className={combinedClassName}>
       {children}
     </button>
   );

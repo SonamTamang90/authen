@@ -1,4 +1,32 @@
+"use client";
+
+import { signIn, SignInResponse } from "next-auth/react";
+import Button from "../Button";
+import ROUTES from "@/constants/routes";
+import toast from "react-hot-toast";
+
 const SocialAuthForm = () => {
+  const handleSignIn = async (provider: "github" | "google") => {
+    try {
+      const result = (await signIn(provider, {
+        callbackUrl: ROUTES.HOME,
+        redirect: false,
+      })) as SignInResponse;
+
+      if (!result?.ok) {
+        if (result?.error) {
+          toast.error(`Sign in failed: ${result.error}`);
+        } else {
+          toast.error(`Failed to sign in with ${provider}. Please try again.`);
+        }
+      } else {
+        toast.success(`Successfully signed in with ${provider}`);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(`Sign in failed. Please try again later.`);
+    }
+  };
   return (
     <div className="mt-8">
       <div className="relative">
@@ -11,9 +39,10 @@ const SocialAuthForm = () => {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-4">
-        <a
-          href="#"
-          className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus-visible:ring-transparent"
+        <Button
+          variant="outline"
+          className="flex w-full items-center justify-center gap-3"
+          onClick={() => handleSignIn("google")}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
             <path
@@ -34,11 +63,12 @@ const SocialAuthForm = () => {
             />
           </svg>
           <span className="text-sm/6 font-semibold">Google</span>
-        </a>
+        </Button>
 
-        <a
-          href="#"
-          className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus-visible:ring-transparent"
+        <Button
+          variant="outline"
+          className="flex w-full items-center justify-center gap-3"
+          onClick={() => handleSignIn("google")}
         >
           <svg
             fill="currentColor"
@@ -53,7 +83,7 @@ const SocialAuthForm = () => {
             />
           </svg>
           <span className="text-sm/6 font-semibold">GitHub</span>
-        </a>
+        </Button>
       </div>
     </div>
   );

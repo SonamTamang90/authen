@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,18 +21,21 @@ export const metadata: Metadata = {
     "Authentication system with Next, Next Auth, Tailwind, React Hook Form, Zod Validations and MongoDB",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await auth();
+  console.log(session);
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} text-gray-950 antialiased`}
-      >
-        {children}
-      </body>
+      <SessionProvider session={session}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} text-gray-950 antialiased`}
+        >
+          {children}
+          <Toaster position="top-center" />
+        </body>
+      </SessionProvider>
     </html>
   );
-}
+};
+
+export default RootLayout;
