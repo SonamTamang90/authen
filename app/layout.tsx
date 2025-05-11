@@ -25,7 +25,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
   console.log(session);
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <SessionProvider session={session}>
         <body
           className={`${geistSans.variable} ${geistMono.variable} text-gray-950 antialiased`}

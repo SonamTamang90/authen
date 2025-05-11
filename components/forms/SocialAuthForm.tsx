@@ -1,32 +1,42 @@
 "use client";
 
-import { signIn, SignInResponse } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Button from "../Button";
 import ROUTES from "@/constants/routes";
-import toast from "react-hot-toast";
 
 const SocialAuthForm = () => {
   const handleSignIn = async (provider: "github" | "google") => {
     try {
-      const result = (await signIn(provider, {
+      await signIn(provider, {
         callbackUrl: ROUTES.HOME,
         redirect: false,
-      })) as SignInResponse;
-
-      if (!result?.ok) {
-        if (result?.error) {
-          toast.error(`Sign in failed: ${result.error}`);
-        } else {
-          toast.error(`Failed to sign in with ${provider}. Please try again.`);
-        }
-      } else {
-        toast.success(`Successfully signed in with ${provider}`);
-      }
+      });
     } catch (error) {
       console.log(error);
-      toast.error(`Sign in failed. Please try again later.`);
     }
   };
+  // const handleSignIn = async (provider: "github" | "google") => {
+  //   try {
+  //     const result = (await signIn(provider, {
+  //       callbackUrl: ROUTES.HOME,
+  //       redirect: false,
+  //     })) as SignInResponse;
+
+  //     if (!result?.ok) {
+  //       if (result?.error) {
+  //         toast.error(`Sign in failed: ${result.error}`);
+  //       } else {
+  //         toast.error(`Failed to sign in with ${provider}. Please try again.`);
+  //       }
+  //     } else {
+  //       toast.success(`Successfully signed in with ${provider}`);
+  //       router.push(ROUTES.HOME);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(`Sign in failed. Please try again later.`);
+  //   }
+  // };
   return (
     <div className="mt-8">
       <div className="relative">
