@@ -3,40 +3,41 @@
 import { signIn } from "next-auth/react";
 import Button from "../Button";
 import ROUTES from "@/constants/routes";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const SocialAuthForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
   const handleSignIn = async (provider: "github" | "google") => {
     try {
-      await signIn(provider, {
+      setIsLoading(true);
+      const result = await signIn(provider, {
         callbackUrl: ROUTES.HOME,
         redirect: false,
       });
+
+      if (result?.error) {
+        console.error("Authentication error:", result.error);
+        toast.error(`Sign in failed: ${result.error}`);
+      } else if (result?.url) {
+        toast.success(`Successfully signed in with ${provider}!`);
+        router.push(result.url);
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Sign in error:", error);
+      toast.error(
+        error instanceof Error
+          ? `Authentication error: ${error.message}`
+          : "An unexpected error occurred during sign-in",
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
-  // const handleSignIn = async (provider: "github" | "google") => {
-  //   try {
-  //     const result = (await signIn(provider, {
-  //       callbackUrl: ROUTES.HOME,
-  //       redirect: false,
-  //     })) as SignInResponse;
 
-  //     if (!result?.ok) {
-  //       if (result?.error) {
-  //         toast.error(`Sign in failed: ${result.error}`);
-  //       } else {
-  //         toast.error(`Failed to sign in with ${provider}. Please try again.`);
-  //       }
-  //     } else {
-  //       toast.success(`Successfully signed in with ${provider}`);
-  //       router.push(ROUTES.HOME);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(`Sign in failed. Please try again later.`);
-  //   }
-  // };
   return (
     <div className="mt-8">
       <div className="relative">
@@ -78,7 +79,7 @@ const SocialAuthForm = () => {
         <Button
           variant="outline"
           className="flex w-full items-center justify-center gap-3"
-          onClick={() => handleSignIn("google")}
+          onClick={() => handleSignIn("github")}
         >
           <svg
             fill="currentColor"
