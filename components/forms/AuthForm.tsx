@@ -7,7 +7,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import Button from "../Button";
-import { FieldValues } from "react-hook-form";
+import {
+  DefaultValues,
+  FieldValues,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import {
   EnvelopeIcon,
   EyeIcon,
@@ -15,13 +20,17 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
+import { z, ZodType } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface AuthFormType<T extends FieldValues> {
+  schema: ZodType<T>;
   formType: "SIGN_IN" | "SIGN_UP";
   defaultValues: T;
 }
 
 const AuthForm = <T extends FieldValues>({
+  schema,
   formType,
   defaultValues,
 }: AuthFormType<T>) => {
@@ -44,6 +53,18 @@ const AuthForm = <T extends FieldValues>({
     confirmpassword: <LockClosedIcon className="h-5 w-5 text-gray-400" />,
   };
 
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: defaultValues as DefaultValues<T>,
+  });
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = form;
+
   const getPlaceholder = (field: string) => {
     switch (field) {
       case "email":
@@ -59,8 +80,12 @@ const AuthForm = <T extends FieldValues>({
     }
   };
 
+  const onSubmit: SubmitHandler<T> = async () => {
+    //TODO: Authenticate users
+  };
+
   return (
-    <form action="#" method="POST">
+    <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-start">
         <Link href="/" title="Home">
           <Image src="/logo.png" alt="Brand Logo" width={44} height={44} />
