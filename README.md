@@ -14,7 +14,7 @@ Authen is a simple authentication system that showcases how to implement user lo
 - 👤 User management with MongoDB
 - 🛡️ Role-based authorization
 - 📝 Form validation with Zod
-- 🎨 Customizable UI components (built with Headless UI & Tailwind CSS)
+- 🎨 Customizable UI components (built with Shadcn & Tailwind CSS)
 - 📱 Responsive design
 - 🌐 TypeScript support for end-to-end type safety
 - 🔄 Session management with NextAuth.js
