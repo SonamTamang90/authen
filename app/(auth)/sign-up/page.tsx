@@ -9,11 +9,13 @@ const SignUp = () => {
       schema={SignUpSchema}
       formType="SIGN_UP"
       defaultValues={{
-        fullname: "",
+        username: "",
+        name: "",
         email: "",
         password: "",
         confirmpassword: "",
       }}
+      onSubmit={(data) => Promise.resolve({ success: true, data })}
     />
   );
 };

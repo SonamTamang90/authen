@@ -66,7 +66,12 @@ const AuthForm = <T extends FieldValues>({
             render={({ field }) => (
               <FormItem className="mt-8">
                 <FormLabel className="text-sm/5 font-medium">
-                  {field.name.charAt(0).toUpperCase() + field.name.slice(1)}
+                  {field.name === "fullname"
+                    ? "Full Name"
+                    : field.name === "confirmpassword"
+                      ? "Confirm Password"
+                      : field.name.charAt(0).toUpperCase() +
+                        field.name.slice(1)}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -86,8 +91,25 @@ const AuthForm = <T extends FieldValues>({
         ))}
         <div className="mt-8">
           <Button size="lg" className={clsx("w-full rounded-full")}>
-            Sign In
+            {formType === "SIGN_IN" ? "Sign in" : "Create Account"}
           </Button>
+        </div>
+        <div className="mt-8 text-center text-sm/5 text-gray-950">
+          {formType === "SIGN_IN" ? (
+            <p>
+              Not a member?{" "}
+              <Link href="/sign-up" className="font-medium hover:text-gray-600">
+                Create an account
+              </Link>
+            </p>
+          ) : (
+            <p>
+              Already have a account?{" "}
+              <Link href="/sign-in" className="font-medium hover:text-gray-600">
+                Sign in
+              </Link>
+            </p>
+          )}
         </div>
       </form>
     </Form>
