@@ -1,3 +1,4 @@
+import SocialAuthForm from "@/components/forms/SocialAuthForm";
 import GradientBackground from "@/components/GradientBackground";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,6 +21,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             </div>
             {children}
+            <SocialAuthForm />
           </div>
         </div>
       </div>

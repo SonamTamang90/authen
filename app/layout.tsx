@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
+import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "Authen | Secure Authentication System",
   description:
@@ -9,14 +11,19 @@ export const metadata: Metadata = {
     "authentication, authorization, Next.js, TypeScript, MongoDB, secure login, OAuth, user management",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await auth();
+  console.log(session);
   return (
     <html lang="en">
-      <body className="text-gray-950 antialiased">{children}</body>
+      <body className="text-gray-950 antialiased">
+        <SessionProvider session={session}>
+          {children}
+          <Toaster />
+        </SessionProvider>
+      </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
