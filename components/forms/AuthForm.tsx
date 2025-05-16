@@ -1,9 +1,22 @@
 "use client";
 
-import { DefaultValues, FieldValues, Path, useForm } from "react-hook-form";
+import {
+  DefaultValues,
+  FieldValues,
+  Path,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import clsx from "clsx";
 import { Button } from "../ui/button";
@@ -16,12 +29,14 @@ interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   formType: "SIGN_IN" | "SIGN_UP";
   defaultValues: T;
+  onSubmit: (data: T) => Promise<{ success: boolean }>;
 }
 
 const AuthForm = <T extends FieldValues>({
   schema,
   formType,
   defaultValues,
+  onSubmit,
 }: AuthFormProps<T>) => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -29,9 +44,11 @@ const AuthForm = <T extends FieldValues>({
   });
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleSubmit: SubmitHandler<T> = async () => {};
+
   return (
     <Form {...form}>
-      <form>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <h1 className="text-base/6 font-medium">
           {formType === "SIGN_IN" ? "Welcome back!" : "Create your account"}
         </h1>
@@ -95,6 +112,7 @@ const AuthForm = <T extends FieldValues>({
                     )}
                   </div>
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
