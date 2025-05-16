@@ -2,7 +2,13 @@
 
 Authentication system built with Next.js, TypeScript, NextAuth, and MongoDB.
 
-![Image Description](public/screenshot/authen-ss.png)
+### User Registeration Form
+
+![Image Description](public/screenshot/register.png)
+
+### User Sign in Form
+
+![Image Description](public/screenshot/sign-in.png)
 
 ### Overview
 
