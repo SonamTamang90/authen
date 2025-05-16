@@ -1,41 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "Authen",
+  title: "Authen | Secure Authentication System",
   description:
-    "Authentication system with Next, Next Auth, Tailwind, React Hook Form, Zod Validations and MongoDB",
+    "Authen is a robust, scalable authentication and authorization solution built with Next.js, Typescript, and MongoDB.Featuring OAuth, email verification, password recovery, and seamless integration for modern web applications.",
+  keywords:
+    "authentication, authorization, Next.js, TypeScript, MongoDB, secure login, OAuth, user management",
 };
 
-const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const session = await auth();
-  console.log(session);
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <SessionProvider session={session}>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} text-gray-950 antialiased`}
-        >
-          {children}
-          <Toaster position="top-center" />
-        </body>
-      </SessionProvider>
+    <html lang="en">
+      <body className="text-gray-950 antialiased">{children}</body>
     </html>
   );
-};
-
-export default RootLayout;
+}
