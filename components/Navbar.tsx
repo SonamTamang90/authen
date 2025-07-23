@@ -7,6 +7,13 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { 
+  UserCircleIcon, 
+  Cog6ToothIcon, 
+  ArrowRightStartOnRectangleIcon,
+  ChevronDownIcon
+} from "@heroicons/react/24/outline";
+import NotificationDropdown from "./NotificationDropdown";
 
 interface User {
   name?: string | null;
@@ -53,41 +60,122 @@ const Navbar = ({ user }: { user: User }) => {
   };
 
   return (
-    <nav className="border-b border-gray-200 bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between p-4">
-        <Link href={ROUTES.HOME} className="text-xl font-semibold">
-          <Image src="/assets/logo.png" alt="logo" width={32} height={32} />
-        </Link>
+    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-8">
+          <Link href={ROUTES.HOME} className="flex items-center gap-2">
+            <Image src="/assets/logo.png" alt="logo" width={32} height={32} />
+            <span className="text-xl font-bold text-gray-900">Authen</span>
+          </Link>
+          
+          <nav className="hidden md:flex items-center gap-6">
+            <Link 
+              href={ROUTES.HOME} 
+              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+            >
+              Dashboard
+            </Link>
+            <Link 
+              href="#" 
+              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+            >
+              Activity
+            </Link>
+            <Link 
+              href="#" 
+              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+            >
+              Analytics
+            </Link>
+          </nav>
+        </div>
 
-        <div className="relative" ref={dropdownRef}>
-          <Button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 rounded-full bg-gray-100 p-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
-          >
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-950 text-white">
-              {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
-            </div>
-            <span className="hidden text-sm/5 sm:inline">
-              {user?.name || "User"}
-            </span>
-          </Button>
+        <div className="flex items-center gap-4">
+          {/* Notifications */}
+          <NotificationDropdown />
 
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 rounded-md border border-gray-200 bg-white py-2 shadow-lg">
-              <div className="border-b border-gray-100 px-4 py-2">
-                <p className="font-medium">{user?.name || "User"}</p>
-                <p className="overflow-hidden text-sm text-ellipsis text-gray-500">
-                  {truncateEmail(user?.email)}
-                </p>
+          {/* User Menu */}
+          <div className="relative" ref={dropdownRef}>
+            <Button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex items-center gap-2 rounded-lg bg-white border border-gray-200 p-2 text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition-all"
+            >
+              {user?.image ? (
+                <Image
+                  src={user.image}
+                  alt={user.name || "User"}
+                  width={28}
+                  height={28}
+                  className="rounded-full"
+                />
+              ) : (
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-semibold">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+                </div>
+              )}
+              <span className="hidden md:inline max-w-32 truncate">
+                {user?.name || "User"}
+              </span>
+              <ChevronDownIcon className={`h-4 w-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            </Button>
+
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 bg-white py-2 shadow-xl ring-1 ring-black ring-opacity-5">
+                <div className="border-b border-gray-100 px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    {user?.image ? (
+                      <Image
+                        src={user.image}
+                        alt={user.name || "User"}
+                        width={40}
+                        height={40}
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold">
+                        {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900 truncate">{user?.name || "User"}</p>
+                      <p className="text-sm text-gray-500 truncate">
+                        {truncateEmail(user?.email)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="py-1">
+                  <Link
+                    href="#"
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <UserCircleIcon className="h-5 w-5 text-gray-400" />
+                    View Profile
+                  </Link>
+                  <Link
+                    href="#"
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <Cog6ToothIcon className="h-5 w-5 text-gray-400" />
+                    Account Settings
+                  </Link>
+                </div>
+                
+                <div className="border-t border-gray-100 py-1">
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    <ArrowRightStartOnRectangleIcon className="h-5 w-5 text-red-500" />
+                    Sign Out
+                  </button>
+                </div>
               </div>
-              <button
-                onClick={handleLogout}
-                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Sign Out
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </nav>
